@@ -113,7 +113,7 @@ local function mutate(code)
 							function() 	-- string
 								return ast._string(
 									string.char(range(math.random(1,10))
-										:map(math.random:bind(32,127)):unpack()))
+										:map(function() return math.random(32,127) end):unpack()))
 							end,
 							function()	-- table ... TODO random init args?
 								return ast._table{}

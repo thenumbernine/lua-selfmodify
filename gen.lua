@@ -1,3 +1,4 @@
+#!/usr/bin/env luajit
 --[[
 GA:
 1) establish all fitnesses
@@ -6,13 +7,18 @@ GA:
 4) kill the weak
 --]]
 require 'ext'
+require 'lfs'
 
 local maxpop = 50
 local popdir = 'pop'
 
 local function dir(loc)
-	local results = io.readproc('dir /b '..loc:gsub('/', '\\')):split('\n'):map(string.trim)
-	if #results:last() == 0 then results:remove() end
+	local results = table()
+	for f in lfs.dir(loc) do
+		if f:sub(1,1) ~= '.' then
+			results:insert(f)
+		end
+	end
 	return results
 end
 
