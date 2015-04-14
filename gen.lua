@@ -1,4 +1,4 @@
-#!/usr/bin/env luajit
+#!/usr/bin/env lua -lluarocks.require
 --[[
 GA:
 1) establish all fitnesses
