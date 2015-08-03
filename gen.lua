@@ -117,7 +117,7 @@ function generation()
 	familyTree[newUnit.id] = newUnitFamilyTreeInfo 
 	-- NOTICE this asserts that the units are created once and never replaced
 	-- currently this is true.  if I start throwing out the stateful units that--after creation--return bad fitnesses then this won't be true anymore
-	file.familytree = (file.familytree or '') .. tolua(newUnitFamilyTreeInfo,'','') .. ';\n'
+	file.familytree = (file.familytree or '') .. tolua(newUnitFamilyTreeInfo) .. ';\n'
 	
 	if #units > maxpop-1 then
 		-- kill the weakest
