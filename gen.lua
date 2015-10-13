@@ -111,7 +111,7 @@ function generation()
 		return
 	end
 
-	newUnit.id = select(2, units:map(function(unit) return unit.id end):sup())+1
+	newUnit.id = units:map(function(unit) return unit.id end):sup()+1
 	file[popdir..'/'..newUnit.id..'.lua'] = newUnit.code
 	local newUnitFamilyTreeInfo = {parent=pickUnit.id, fitness=newUnit.fitness, code=newUnit.code}
 	familyTree[newUnit.id] = newUnitFamilyTreeInfo 
@@ -121,7 +121,7 @@ function generation()
 	
 	if #units > maxpop-1 then
 		-- kill the weakest
-		local weakestUnitIndex = units:map(function(unit) return unit.fitness end):inf()
+		local weakestUnitIndex = select(2, units:map(function(unit) return unit.fitness end):inf())
 		local weakestUnit = units[weakestUnitIndex]
 		print('killing weak unit:', weakestUnit.id, weakestUnit.fitness, weakestUnit.code)
 		units:remove(weakestUnitIndex)
