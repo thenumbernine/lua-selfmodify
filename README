@@ -11,3 +11,9 @@ does your typical genetic algorithm thing
 comes up with a solution sometimes
 
 capable of outputting family trees in GraphViz Dot format
+
+usage:
+
+1) mkdir pop
+2) copy 0.lua into pop
+3) uncomment a fitness function of your choice

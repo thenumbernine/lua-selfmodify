@@ -24,7 +24,7 @@ end
 
 -- units is a collection of: {id=id, code=code, fitness=fitness} 
 local units = table()
-local familyTree = assert(loadstring('return {'..(file.familytree or '')..'}'))()
+local familyTree = assert(load('return {'..(file.familytree or '')..'}'))()
 
 -- load units from disk
 for _,filename in ipairs(dir(popdir)) do
@@ -50,7 +50,7 @@ local fitnessFunction = require 'problems.primes'
 
 local function calcFitness(unitCode)
 	local result, fitness = pcall(function()
-		local fitness = fitnessFunction(loadstring(unitCode)(), unitCode)
+		local fitness = fitnessFunction(load(unitCode)(), unitCode)
 		return type(fitness) == 'number' and fitness == fitness and fitness
 	end)
 	return result and fitness
@@ -95,8 +95,8 @@ function generation()
 	print('new unit:', newUnit.code)
 
 	-- validation test
-	local result, callback = xpcall(loadstring:bind(newUnit.code), function(err)
-		io.stderr:write('new unit died in loadstring\n')
+	local result, callback = xpcall(load:bind(newUnit.code), function(err)
+		io.stderr:write('new unit died in load\n')
 		io.stderr:write(err..'\n'..debug.traceback())
 	end)
 	if not result then return end

@@ -82,7 +82,7 @@ local function mutate(code)
 			-- TODO instead of giving functions equal footing with astExprs 
 			--  how about making them a single branch of astExprs
 			local pickAstExpr = pickrandom(table():append(astExprs):append(globalFuncs))
-			return pickAstExpr.func(range(math.random(unpack(pickAstExpr.nargs))):map(function()
+			return pickAstExpr.func(range(math.random(table.unpack(pickAstExpr.nargs))):map(function()
 				return pickrandom{
 					function() -- var
 						return pickrandom(
