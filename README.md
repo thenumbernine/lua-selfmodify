@@ -15,5 +15,6 @@ capable of outputting family trees in GraphViz Dot format
 usage:
 
 1) mkdir pop
-2) copy 0.lua into pop
-3) uncomment a fitness function of your choice
+2) cp 0.lua pop
+3) uncomment a fitness function of your choice inside of gen.lua
+4) ./gen.lua
