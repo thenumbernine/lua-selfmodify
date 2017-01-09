@@ -1,4 +1,4 @@
-#!/usr/bin/env lua -lluarocks.require
+#!/usr/bin/env lua
 --[[
 GA:
 1) establish all fitnesses
@@ -45,8 +45,8 @@ math.randomseed(os.time())
 -- problem-specific:
 -- fitness must be non-negative real
 --local fitnessFunction = require 'problems.heaviside_step'
---local fitnessFunction = require 'problems.sine'
-local fitnessFunction = require 'problems.primes'
+local fitnessFunction = require 'problems.sine'
+--local fitnessFunction = require 'problems.primes'
 
 local function calcFitness(unitCode)
 	local result, fitness = pcall(function()
@@ -168,9 +168,9 @@ local switch = {
 				local t = 1 - s
 				local cn = colors[f%#colors+1]
 				local cp = colors[f]
-				local r = (cn[1] * s + cp[1] * t) * 255
-				local g = (cn[2] * s + cp[2] * t) * 255
-				local b = (cn[3] * s + cp[3] * t) * 255
+				local r = math.floor((cn[1] * s + cp[1] * t) * 255)
+				local g = math.floor((cn[2] * s + cp[2] * t) * 255)
+				local b = math.floor((cn[3] * s + cp[3] * t) * 255)
 				local color = ('"#%02x%02x%02x"'):format(r,g,b)
 				return '\t' .. info.parent .. ' -> ' .. id .. ' [color=' .. color .. ']', #dest+1
 			end):concat'\n',
