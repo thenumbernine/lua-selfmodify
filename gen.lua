@@ -24,7 +24,7 @@ end
 
 -- units is a collection of: {id=id, code=code, fitness=fitness} 
 local units = table()
-local familyTree = assert(load('return {'..(file.familytree or '')..'}'))()
+local familyTree = fromlua('{'..(file.familytree or '')..'}')
 
 -- load units from disk
 for _,filename in ipairs(dir(popdir)) do
@@ -45,8 +45,9 @@ math.randomseed(os.time())
 -- problem-specific:
 -- fitness must be non-negative real
 --local fitnessFunction = require 'problems.heaviside_step'
-local fitnessFunction = require 'problems.sine'
+--local fitnessFunction = require 'problems.sine'
 --local fitnessFunction = require 'problems.primes'
+local fitnessFunction = require 'problems.perfecthash'
 
 local function calcFitness(unitCode)
 	local result, fitness = pcall(function()
@@ -160,7 +161,7 @@ local switch = {
 			'digraph tree {',
 			table.map(familyTree, function(info, id, dest)
 				-- color by fitness
-				local x = math.max(0,math.min(1,math.log10(info.fitness)/25+1)) * (#colors - 1) + 1
+				local x = math.max(0,math.min(1,math.log(info.fitness,10)/25+1)) * (#colors - 1) + 1
 				-- color by generation
 				--local x = id/#familyTree * (#colors-1) + 1
 				local f = math.floor(x)

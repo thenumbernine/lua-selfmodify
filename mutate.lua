@@ -11,7 +11,7 @@ local globalVars = table{'huge', 'pi'}:map(function(v) return 'math.'..v end)
 -- which functions we let the mutation call out to
 local globalFuncs = 
 	table()	
-	:append(table{'abs', 'acos', 'asin', 'atan', 'ceil', 'cos', 'cosh', 'deg', 'exp', 'floor', 'frexp', 'log', 'log10', 'modf', 'rad', --[['randomseed', halts mutation]] 'sin', 'sinh', 'sqrt', 'tan', 'tanh'}
+	:append(table{'abs', 'acos', 'asin', 'atan', 'ceil', 'cos', 'cosh', 'deg', 'exp', 'floor', 'frexp', 'log', --[['log10',]] 'modf', 'rad', --[['randomseed', halts mutation]] 'sin', 'sinh', 'sqrt', 'tan', 'tanh'}
 		:map(function(v) return {name='math.'..v, nargs={1,1}} end))	-- 1
 	:append(table{'atan2', 'fmod', 'ldexp', 'pow'}
 		:map(function(v) return {name='math.'..v, nargs={2,2}} end))	-- 2
