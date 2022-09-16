@@ -24,7 +24,7 @@ end
 
 -- units is a collection of: {id=id, code=code, fitness=fitness} 
 local units = table()
-local familyTree = fromlua('{'..(file.familytree or '')..'}')
+local familyTree = fromlua('{'..(file'familytree':read() or '')..'}')
 
 -- load units from disk
 for _,filename in ipairs(dir(popdir)) do
@@ -118,7 +118,7 @@ function generation()
 	familyTree[newUnit.id] = newUnitFamilyTreeInfo 
 	-- NOTICE this asserts that the units are created once and never replaced
 	-- currently this is true.  if I start throwing out the stateful units that--after creation--return bad fitnesses then this won't be true anymore
-	file.familytree = (file.familytree or '') .. tolua(newUnitFamilyTreeInfo) .. ';\n'
+	file'familytree':write((file'familytree':read() or '') .. tolua(newUnitFamilyTreeInfo) .. ';\n')
 	
 	if #units > maxpop-1 then
 		-- kill the weakest
@@ -145,7 +145,7 @@ local switch = {
 			file(popdir..'/'..filename):remove()
 		end
 		file(popdir..'/0.lua'):write(file'0.lua':read())
-		file.familytree = nil
+		file'familytree':remove()
 	end,
 	maketree = function()
 		-- build dot file of generations
