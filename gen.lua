@@ -34,7 +34,7 @@ for _,filename in ipairs(dir(popdir)) do
 		if id then
 			units:insert{
 				id=id,
-				code=file[popdir..'/'..filename],
+				code=file(popdir..'/'..filename):read(),
 			}
 		end
 	end
@@ -113,7 +113,7 @@ function generation()
 	end
 
 	newUnit.id = units:map(function(unit) return unit.id end):sup()+1
-	file[popdir..'/'..newUnit.id..'.lua'] = newUnit.code
+	file(popdir..'/'..newUnit.id..'.lua'):write(newUnit.code)
 	local newUnitFamilyTreeInfo = {parent=pickUnit.id, fitness=newUnit.fitness, code=newUnit.code}
 	familyTree[newUnit.id] = newUnitFamilyTreeInfo 
 	-- NOTICE this asserts that the units are created once and never replaced
@@ -126,7 +126,7 @@ function generation()
 		local weakestUnit = units[weakestUnitIndex]
 		print('killing weak unit:', weakestUnit.id, weakestUnit.fitness, weakestUnit.code)
 		units:remove(weakestUnitIndex)
-		file[popdir..'/'..weakestUnit.id..'.lua'] = nil
+		file(popdir..'/'..weakestUnit.id..'.lua'):remove()
 	end
 
 	units:insert(newUnit)
@@ -142,9 +142,9 @@ local switch = {
 	reset = function()
 		print'resetting...'
 		for _,filename in ipairs(dir(popdir)) do
-			file[popdir..'/'..filename] = nil
+			file(popdir..'/'..filename):remove()
 		end
-		file[popdir..'/0.lua'] = file['0.lua']
+		file(popdir..'/0.lua'):write(file'0.lua':read())
 		file.familytree = nil
 	end,
 	maketree = function()
@@ -157,7 +157,7 @@ local switch = {
 			{0,0,1},
 			{1,0,1},
 		}
-		file['familytree.dot'] = table{
+		file'familytree.dot':write(table{
 			'digraph tree {',
 			table.map(familyTree, function(info, id, dest)
 				-- color by fitness
@@ -176,7 +176,7 @@ local switch = {
 				return '\t' .. info.parent .. ' -> ' .. id .. ' [color=' .. color .. ']', #dest+1
 			end):concat'\n',
 			'}',
-		}:concat'\n'
+		}:concat'\n')
 	
 		os.execute'dot -Tsvg -o familytree.svg familytree.dot'	
 	end,
