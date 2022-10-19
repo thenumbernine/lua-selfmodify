@@ -1,28 +1,32 @@
-lua self-generating code
+[![Donate via Stripe](https://img.shields.io/badge/Donate-Stripe-green.svg)](https://buy.stripe.com/00gbJZ0OdcNs9zi288)<br>
+[![Donate via Bitcoin](https://img.shields.io/badge/Donate-Bitcoin-green.svg)](bitcoin:37fsp7qQKU8XoHZGRQvVzQVP8FrEJ73cSJ)<br>
+[![Donate via Paypal](https://img.shields.io/badge/Donate-Paypal-green.svg)](https://buy.stripe.com/00gbJZ0OdcNs9zi288)
 
-requires my lua-parser, lua-ext, and the LuaFileSystem projects
+## Lua Self-Generating Code via Genetic Algorithm
 
-starts with an empty function
+Requires my lua-parser, lua-ext, and the LuaFileSystem projects.
 
-applies single mutations to the AST of the function
+Starts with an empty function.
 
-does your typical genetic algorithm thing
+Applies single mutations to the AST of the function.
 
-comes up with a solution sometimes
+Does your typical genetic algorithm thing.
 
-capable of outputting family trees in GraphViz Dot format
+Comes up with a solution sometimes.
 
-usage:
+Capable of outputting family trees in GraphViz Dot format.
+
+Usage:
 
 1) mkdir pop
 2) cp 0.lua pop
 3) uncomment a fitness function of your choice inside of gen.lua
-4a) ./gen.lua <# of iterations>      
+4a) ./gen.lua <# of iterations>
 or 4b) ./gen.lua forever
 
-to reset: ./gen.lua reset
+To reset: ./gen.lua reset
 
-to create a family tree: ./gen.lua maketree 
+To create a family tree: ./gen.lua maketree
 (requires graphviz's 'dot' to be installed)
 
 Example of a family tree solving the sine problem:
