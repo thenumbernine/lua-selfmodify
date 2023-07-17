@@ -24,7 +24,7 @@ end
 
 -- units is a collection of: {id=id, code=code, fitness=fitness} 
 local units = table()
-local familyTree = fromlua('{'..(file'familytree':read() or '')..'}')
+local familyTree = fromlua('{'..(path'familytree':read() or '')..'}')
 
 -- load units from disk
 for _,filename in ipairs(dir(popdir)) do
@@ -34,7 +34,7 @@ for _,filename in ipairs(dir(popdir)) do
 		if id then
 			units:insert{
 				id=id,
-				code=file(popdir..'/'..filename):read(),
+				code=path(popdir..'/'..filename):read(),
 			}
 		end
 	end
@@ -113,12 +113,12 @@ function generation()
 	end
 
 	newUnit.id = units:map(function(unit) return unit.id end):sup()+1
-	file(popdir..'/'..newUnit.id..'.lua'):write(newUnit.code)
+	path(popdir..'/'..newUnit.id..'.lua'):write(newUnit.code)
 	local newUnitFamilyTreeInfo = {parent=pickUnit.id, fitness=newUnit.fitness, code=newUnit.code}
 	familyTree[newUnit.id] = newUnitFamilyTreeInfo 
 	-- NOTICE this asserts that the units are created once and never replaced
 	-- currently this is true.  if I start throwing out the stateful units that--after creation--return bad fitnesses then this won't be true anymore
-	file'familytree':write((file'familytree':read() or '') .. tolua(newUnitFamilyTreeInfo) .. ';\n')
+	path'familytree':write((path'familytree':read() or '') .. tolua(newUnitFamilyTreeInfo) .. ';\n')
 	
 	if #units > maxpop-1 then
 		-- kill the weakest
@@ -126,7 +126,7 @@ function generation()
 		local weakestUnit = units[weakestUnitIndex]
 		print('killing weak unit:', weakestUnit.id, weakestUnit.fitness, weakestUnit.code)
 		units:remove(weakestUnitIndex)
-		file(popdir..'/'..weakestUnit.id..'.lua'):remove()
+		path(popdir..'/'..weakestUnit.id..'.lua'):remove()
 	end
 
 	units:insert(newUnit)
@@ -142,10 +142,10 @@ local switch = {
 	reset = function()
 		print'resetting...'
 		for _,filename in ipairs(dir(popdir)) do
-			file(popdir..'/'..filename):remove()
+			path(popdir..'/'..filename):remove()
 		end
-		file(popdir..'/0.lua'):write(file'0.lua':read())
-		file'familytree':remove()
+		path(popdir..'/0.lua'):write(path'0.lua':read())
+		path'familytree':remove()
 	end,
 	maketree = function()
 		-- build dot file of generations
@@ -157,7 +157,7 @@ local switch = {
 			{0,0,1},
 			{1,0,1},
 		}
-		file'familytree.dot':write(table{
+		path'familytree.dot':write(table{
 			'digraph tree {',
 			table.map(familyTree, function(info, id, dest)
 				-- color by fitness
