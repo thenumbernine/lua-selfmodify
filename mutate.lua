@@ -1,5 +1,5 @@
 local parser = require 'parser'
-local ast = require 'parser.ast'
+local ast = parser.ast
 require 'ext'
 
 local function pickrandom(x) 

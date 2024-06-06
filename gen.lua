@@ -45,9 +45,9 @@ math.randomseed(os.time())
 -- problem-specific:
 -- fitness must be non-negative real
 --local fitnessFunction = require 'problems.heaviside_step'
---local fitnessFunction = require 'problems.sine'
+local fitnessFunction = require 'problems.sine'
 --local fitnessFunction = require 'problems.primes'
-local fitnessFunction = require 'problems.perfecthash'
+--local fitnessFunction = require 'problems.perfecthash'
 
 local function calcFitness(unitCode)
 	local result, fitness = pcall(function()
