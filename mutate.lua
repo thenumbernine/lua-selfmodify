@@ -70,9 +70,9 @@ local function mutate(code)
 		local allvars = table(body.args)
 		-- add to body.args any variables declared before this statement
 		for i=1,insertLocation-1 do
-			if getmetatable(body[i]) == ast._local then
+			if ast._local:isa(body[i]) then
 				local localExpr = body[i].exprs[1]
-				if getmetatable(localExpr) == ast._assign then
+				if ast._assign(localExpr) then
 					allvars:append(localExpr.vars)
 				end
 			end
@@ -116,7 +116,7 @@ local function mutate(code)
 										:map(function() return math.random(32,127) end):unpack()))
 							end,
 							function()	-- table ... TODO random init args?
-								return ast._table{}
+								return ast._table()
 							end,
 							--function()	-- function ...
 							--end,
