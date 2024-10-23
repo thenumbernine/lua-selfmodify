@@ -7,34 +7,25 @@ GA:
 4) kill the weak
 --]]
 require 'ext'
-require 'lfs'
 
 local maxpop = 50
-local popdir = 'pop'
+local popdir = path'pop'
+popdir:mkdir()
+assert(popdir:isdir())
 
-local function dir(loc)
-	local results = table()
-	for f in lfs.dir(loc) do
-		if f:sub(1,1) ~= '.' then
-			results:insert(f)
-		end
-	end
-	return results
-end
-
--- units is a collection of: {id=id, code=code, fitness=fitness} 
+-- units is a collection of: {id=id, code=code, fitness=fitness}
 local units = table()
 local familyTree = fromlua('{'..(path'familytree':read() or '')..'}')
 
 -- load units from disk
-for _,filename in ipairs(dir(popdir)) do
-	local id = filename:match('^(%d+)%.lua$')
+for filename in popdir:dir() do
+	local id = filename.path:match'^(%d+)%.lua$'
 	if id then
 		id = tonumber(id)
 		if id then
 			units:insert{
 				id=id,
-				code=path(popdir..'/'..filename):read(),
+				code=popdir(filename):read(),
 			}
 		end
 	end
@@ -79,6 +70,7 @@ function generation()
 		totalFitness = totalFitness + unit.fitness
 	end
 
+	local pickUnit
 	local pickFitness = math.random() * totalFitness
 	for _,unit in ipairs(units) do
 		pickFitness = pickFitness - unit.fitness
@@ -113,20 +105,20 @@ function generation()
 	end
 
 	newUnit.id = units:map(function(unit) return unit.id end):sup()+1
-	path(popdir..'/'..newUnit.id..'.lua'):write(newUnit.code)
+	popdir(newUnit.id..'.lua'):write(newUnit.code)
 	local newUnitFamilyTreeInfo = {parent=pickUnit.id, fitness=newUnit.fitness, code=newUnit.code}
-	familyTree[newUnit.id] = newUnitFamilyTreeInfo 
+	familyTree[newUnit.id] = newUnitFamilyTreeInfo
 	-- NOTICE this asserts that the units are created once and never replaced
 	-- currently this is true.  if I start throwing out the stateful units that--after creation--return bad fitnesses then this won't be true anymore
 	path'familytree':write((path'familytree':read() or '') .. tolua(newUnitFamilyTreeInfo) .. ';\n')
-	
+
 	if #units > maxpop-1 then
 		-- kill the weakest
 		local weakestUnitIndex = select(2, units:map(function(unit) return unit.fitness end):inf())
 		local weakestUnit = units[weakestUnitIndex]
 		print('killing weak unit:', weakestUnit.id, weakestUnit.fitness, weakestUnit.code)
 		units:remove(weakestUnitIndex)
-		path(popdir..'/'..weakestUnit.id..'.lua'):remove()
+		popdir(weakestUnit.id..'.lua'):remove()
 	end
 
 	units:insert(newUnit)
@@ -135,16 +127,16 @@ end
 local cmd = arg[1]
 local switch = {
 	forever = function()
-		while true do 
+		while true do
 			generation()
 		end
 	end,
 	reset = function()
 		print'resetting...'
-		for _,filename in ipairs(dir(popdir)) do
-			path(popdir..'/'..filename):remove()
+		for _,filename in popdir:dir() do
+			popdir(filename):remove()
 		end
-		path(popdir..'/0.lua'):write(path'0.lua':read())
+		popdir'0.lua':write(path'0.lua':read())
 		path'familytree':remove()
 	end,
 	maketree = function()
@@ -177,8 +169,8 @@ local switch = {
 			end):concat'\n',
 			'}',
 		}:concat'\n')
-	
-		os.execute'dot -Tsvg -o familytree.svg familytree.dot'	
+
+		os.execute'dot -Tsvg -o familytree.svg familytree.dot'
 	end,
 }
 (switch[cmd] or function()	-- default
