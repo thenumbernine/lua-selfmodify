@@ -1,13 +1,18 @@
+--------------------------------------------
+-- generated with dist/build-distinfo.rua --
+--------------------------------------------
+
 name = "selfmodify"
 files = {
-	["0.lua"] = "selfmodify/0.lua",
-	["README.md"] = "selfmodify/README.md",
-	["examples/familytree.svg"] = "selfmodify/examples/familytree.svg",
-	["gen.lua"] = "selfmodify/gen.lua",
-	["mutate.lua"] = "selfmodify/mutate.lua",
-	["problems/heaviside_step.lua"] = "selfmodify/problems/heaviside_step.lua",
-	["problems/primes.lua"] = "selfmodify/problems/primes.lua",
-	["problems/sine.lua"] = "selfmodify/problems/sine.lua",
+	"0.lua",
+	"README.md",
+	"distinfo",
+	"examples/familytree.svg",
+	"gen.lua",
+	"mutate.lua",
+	"problems/heaviside_step.lua",
+	"problems/primes.lua",
+	"problems/sine.lua",
 }
 deps = {
 	"ext",
